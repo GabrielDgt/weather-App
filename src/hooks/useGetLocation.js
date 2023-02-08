@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 export function useGetLocation () {
-  const [initial, setInitial] = useState(null)
+  const [location, setLocation] = useState(null)
 
   useEffect(() => {
     const options = {
@@ -11,11 +11,8 @@ export function useGetLocation () {
     }
 
     function getCurrentLoc (pos) {
-      const getCoords = pos.coords
-      setInitial({
-        lat: getCoords.latitude,
-        lng: getCoords.longitude
-      })
+      const getCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude }
+      setLocation(getCoords)
     }
     function onError (err) {
       console.warn(`ERROR(${err.code}): ${err.message}`)
@@ -23,5 +20,5 @@ export function useGetLocation () {
     navigator.geolocation.getCurrentPosition(getCurrentLoc, onError, options)
   }, [])
 
-  return { initial }
+  return { location }
 }

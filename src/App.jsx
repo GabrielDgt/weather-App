@@ -9,8 +9,8 @@ const App = () => {
   const [cities, setCities] = useState([])
   const [weather, setWeather] = useState(null)
   const currLocation = useGetLocation()
-
-  console.log(currLocation)
+  const location = currLocation.location
+  console.log(location)
   useEffect(() => {
     (async () => {
       setCountries(await getCountries())
