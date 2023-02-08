@@ -2,11 +2,15 @@ import { useEffect, useState } from 'react'
 import { getCountries } from './services/getCountries'
 import { getCities } from './services/getCities'
 import { getWeather } from './services/getWeather'
+import { useGetLocation } from './hooks/useGetLocation'
 
 const App = () => {
   const [countries, setCountries] = useState([])
   const [cities, setCities] = useState([])
   const [weather, setWeather] = useState(null)
+  const currLocation = useGetLocation()
+
+  console.log(currLocation)
   useEffect(() => {
     (async () => {
       setCountries(await getCountries())
