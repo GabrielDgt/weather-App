@@ -3,6 +3,7 @@ import { getCountries } from './services/getCountries'
 import { getCities } from './services/getCities'
 import { getWeather } from './services/getWeather'
 import { useGetLocation } from './hooks/useGetLocation'
+import { useLocationData } from './hooks/useLocationData'
 
 const App = () => {
   const [countries, setCountries] = useState([])
@@ -10,7 +11,8 @@ const App = () => {
   const [weather, setWeather] = useState(null)
   const currLocation = useGetLocation()
   const location = currLocation.location
-  console.log(location)
+  const { currLocationData } = useLocationData()
+
   useEffect(() => {
     (async () => {
       setCountries(await getCountries())
