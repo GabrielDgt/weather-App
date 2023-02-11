@@ -1,14 +1,23 @@
-import apiResponse from '../mocks/apiResponse.json'
+import { useState, useEffect } from 'react'
+import { getCurrLocData } from './../services/getCurrLocData'
 
-export function useLocationData () {
-  const apiRes = apiResponse
+export function useLocationData (locationCoords) {
+  const [locationData, setLocationData] = useState(null)
 
-  const auxLocData = apiRes.slice(0, 1)
+  useEffect(() => {
+    if (locationCoords === null) return
+    const auxLocdata = getCurrLocData(locationCoords)
+    auxLocdata.then(resp => {
+      const data = resp.slice(0, 1)
+      setLocationData({
+        id: data[0].postal_code,
+        country: data[0].country,
+        city: data[0].area,
+        locality: data[0].locality,
+        region: data[0].region
+      })
+    })
+  }, [locationCoords])
 
-  const locationData = {
-    id: auxLocData[0].CountryId,
-    country: auxLocData[0].Country,
-    city: auxLocData[0].City
-  }
-  return { currLocationData: locationData }
+  return locationData
 }

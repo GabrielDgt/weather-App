@@ -5,7 +5,7 @@ export const getWeather = async (cityName) => {
     method: 'GET',
     url: 'https://weatherapi-com.p.rapidapi.com/forecast.json',
     params: {
-      q: cityName ?? 'Miami',
+      q: cityName ?? 'Barcelona',
       days: '3'
     },
     headers: {
