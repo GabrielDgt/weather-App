@@ -35,6 +35,10 @@ h1 {
   line-height: 1.1;
 }
 
+input:focus {
+  outline: none;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -54,7 +58,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
     color: #213547;
     background-color: #ffffff;

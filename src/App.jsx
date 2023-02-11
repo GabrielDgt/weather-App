@@ -1,65 +1,46 @@
 import { useEffect, useState } from 'react'
-import { getCountries } from './services/getCountries'
-import { getCities } from './services/getCities'
 import { getWeather } from './services/getWeather'
-import { useGetLocation } from './hooks/useGetLocation'
-import { useLocationData } from './hooks/useLocationData'
+// import { useLocationData } from './hooks/useLocationData'
+// import { getLocation } from './tools/getLocation'
 
 const App = () => {
-  const [countries, setCountries] = useState([])
-  const [cities, setCities] = useState([])
-  const [weather, setWeather] = useState(null)
-  const currLocation = useGetLocation()
-  const location = currLocation.location
-  const { currLocationData } = useLocationData()
-
+  // const locationCoords = getLocation()
+  // const locationData = useLocationData(locationCoords)
+  // console.log(locationData)
+  const [city, setCity] = useState(null)
+  const [weather, setWeather] = useState()
+console.log(weather)
   useEffect(() => {
     (async () => {
-      setCountries(await getCountries())
+      setWeather(await getWeather(city))
     })()
-  }, [])
+  }, [city])
 
-  const countryHandler = async e => {
-    e.currentTarget.value && setCities(await getCities(e.currentTarget.value))
-    setWeather(null)
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const newSearch = new window.FormData(event.target)
+    const search = newSearch.get('search')
+    console.log(search)
+    setCity(search)
   }
-  const cityHandler = async e => e.currentTarget.value && setWeather(await getWeather(e.currentTarget.value))
 
   return (
-    <>
-      <div>
-        <label>Select a Country</label>
-        <select name='country' id='country' onChange={countryHandler}>
-          <option value=''>Select</option>
-          {countries.map(country => <option key={country.cca2} value={country.cca2}>{country.name.common}</option>)}
-        </select>
-      </div>
-
-      {cities.length > 0 && (
-        <div>
-          <label>Select a City</label>
-          <select name='city' id='city' onChange={cityHandler}>
-            <option value=''>Select</option>
-            {cities.map(city => <option key={city.id} value={city.name}>{city.name}</option>)}
-          </select>
-        </div>
-      )}
-
-      <hr />
-
-      {weather && (
-        <div>
-          <h2>Current Temperature: {weather.current.temp_c.toFixed()}º</h2>
-          <p>Feels Like: {weather.current.feelslike_c.toFixed()}º</p>
-          <p>Humidity: {weather.current.humidity}%</p>
-          <span>
-            <img src={weather.current.condition.icon} alt='' />
-            <figcaption>{weather.current.condition.text}</figcaption>
-          </span>
-        </div>
-      )}
-
-    </>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input name='search' placeholder='Caracas, Buenos Aires, Madrid, Barcelona... ' />
+        <button type='submit'>Find</button>
+      </form>
+      <section>
+        <h2>Location: {weather && weather.location.name}</h2>
+        <h3>Current Temperature: {weather && weather.current.temp_c.toFixed()}º</h3>
+        <p>Feels Like: {weather && weather.current.feelslike_c.toFixed()}º</p>
+        <p>Humidity: {weather && weather.current.humidity}%</p>
+        <span>
+          <img src={weather && weather.current.condition.icon} alt='' />
+          <figcaption>{weather && weather.current.condition.text}</figcaption>
+        </span>
+      </section>
+    </div>
   )
 }
 
